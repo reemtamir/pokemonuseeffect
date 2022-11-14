@@ -4,14 +4,16 @@ import PopUp from './PopUp';
 const PokemonCard = ({ chosenPokemon }) => {
   const [pokemon, setPokemon] = useState(null);
   const [isFront, setIsFront] = useState(true);
-  const [isPreset, setIsPreset] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
+  let text = isFront ? 'back' : 'front';
   useEffect(() => {
     const getPokemon = async () => {
       const response = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${chosenPokemon}`
       );
       const responseData = await response.json();
+
       const {
         id,
         name,
@@ -19,29 +21,35 @@ const PokemonCard = ({ chosenPokemon }) => {
           front_shiny: front,
           back_shiny: back,
           other: {
-            dream_world: { front_default: fancy },
+            ['official-artwork']: { front_default: fancy },
           },
         },
       } = responseData;
+      const {
+        ability: { name: effectName, url },
+      } = responseData.abilities[0];
+
       setPokemon({
         name: name,
         id: id,
         img: isFront ? front : back,
         fancy: fancy,
+        ability: effectName,
+        url: url,
       });
     };
 
     getPokemon();
-  }, [chosenPokemon, isFront, isPreset]);
+  }, [chosenPokemon, isFront, isPressed]);
   const showImg = () => {
-    setIsPreset(true);
+    setIsPressed(true);
   };
   const handleClick = () => {
-    setIsPreset(false);
+    setIsPressed(false);
   };
   return (
     <>
-      {pokemon && !isPreset && (
+      {pokemon && !isPressed && (
         <div className="card m-auto text-center" style={{ width: '18rem' }}>
           <img
             src={pokemon.img}
@@ -56,16 +64,16 @@ const PokemonCard = ({ chosenPokemon }) => {
               onClick={() => setIsFront((isFront) => !isFront)}
               className="btn btn-primary me-3 "
             >
-              Click
+              {text}
             </button>
 
             <button className="btn btn-dark me-3 " onClick={showImg}>
-              Click{' '}
+              Show full image{' '}
             </button>
           </div>
         </div>
       )}
-      {isPreset && <PopUp pokemon={pokemon} handleClick={handleClick} />}
+      {isPressed && <PopUp pokemon={pokemon} handleClick={handleClick} />}
     </>
   );
 };

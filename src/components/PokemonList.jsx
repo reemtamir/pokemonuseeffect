@@ -11,7 +11,7 @@ const PokemonList = () => {
       );
       const responseData = await response.json();
 
-      setPokemonList(responseData.results.map((result) => result.name));
+      setPokemonList(responseData.results.map((result) => result.name).sort());
     };
     getPokemonName();
   }, []);
