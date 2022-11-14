@@ -4,6 +4,7 @@ const PopUp = ({ handleClick, pokemon }) => {
     <>
       <div className="move">
         <div className="mb-5 ">
+          <h2>{name.toUpperCase()}</h2>
           <img src={fancy} alt={`${name}'image`} />
         </div>
         <button className="btn btn-info" onClick={handleClick}>
