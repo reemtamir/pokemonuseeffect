@@ -27,7 +27,7 @@ const PokemonList = () => {
           value={chosenPokemon}
         >
           {' '}
-          <option>Chose Pokemon</option>
+          <option>Choose Pokemon</option>
           {pokemonList.map((name) => (
             <option key={name} value={name}>
               {name}
